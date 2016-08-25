@@ -7,13 +7,14 @@ class OasmsAgent extends Agent {
 	//发送短信一级入口
 	public function sendSms($to, $content, $tempId, array $data) {
 		//在这个方法中调用二级入口
+		$content .= $this->sign_name; //补充签名
 		$this->sendContentSms($to, $content);
 	}
 
 	//override
 	//发送短信二级入口：发送内容短信
 	public function sendContentSms($to, $content) {
-		$url = $this->clUrl;
+		$url = $this->url;
 
 		//接口参数
 		$params = array(
@@ -29,75 +30,66 @@ class OasmsAgent extends Agent {
 
 		//可用方法:
 		$result = $this->curlPost($url, $params);
-		$result = $this->execResult($result);
+		$result = explode("#", $result);
 
 		//更新发送结果
-		if (0 == $result[1]) {
+		if (1 == $result[0]) {
 			$this->result('success', true); //发送成功
 		} else {
 			$this->result('success', false); //发送失败
 		}
-		$this->result('code', $result[1]); //发送结果代码
-		switch ($result[1]) {
-		case '0': //成功
+		$this->result('code', $result[0]); //发送结果代码
+		switch ($result[0]) {
+		case '1':
 			$this->result('info', '发送成功'); //发送结果信息说明
 			break;
-		case '101': //无此用户
-			$this->result('info', '无此用户'); //发送结果信息说明
+		case '102': //无该企业或者密码错误
+			$this->result('info', '无该企业或者密码错误,或者企业，密码为空'); //发送结果信息说明
 			break;
-		case '102': //密码错
-			$this->result('info', '密码错误'); //发送结果信息说明
+		case '103': //企业被禁用
+			$this->result('info', '企业被禁用'); //发送结果信息说明
 			break;
-		case '103': //提交过快（提交速度超过流速限制）
-			$this->result('info', '提交过快'); //发送结果信息说明
+		case '104': //业务错误
+			$this->result('info', '业务错误'); //发送结果信息说明
 			break;
-		case '104': //系统忙（因平台侧原因，暂时无法处理提交的短信）
-			$this->result('info', '系统忙'); //发送结果信息说明
+		case '105': //余额不足
+			$this->result('info', '余额不足'); //发送结果信息说明
 			break;
-		case '105': //敏感短信（短信内容包含敏感词）
-			$this->result('info', '短信内容包含敏感词'); //发送结果信息说明
+		case '106': //IP限制
+			$this->result('info', 'IP限制'); //发送结果信息说明
 			break;
-		case '106': //消息长度错（>536或<=0）
-			$this->result('info', '消息长度错误'); //发送结果信息说明
+		case '107': //系统繁忙
+			$this->result('info', '系统繁忙'); //发送结果信息说明
 			break;
-		case '107': //包含错误的手机号码
-			$this->result('info', '包含错误的手机号码'); //发送结果信息说明
+		case '108': //非法词组
+			$this->result('info', '非法词组'); //发送结果信息说明
 			break;
-		case '108': //手机号码个数错（群发>50000或<=0;单发>200或<=0）
-			$this->result('info', '手机号码个数错误'); //发送结果信息说明
+		case '109': //手机黑名单
+			$this->result('info', '手机黑名单'); //发送结果信息说明
 			break;
-		case '109': //无发送额度（该用户可用短信数已使用完）
-			$this->result('info', '可用短信数已使用完'); //发送结果信息说明
+		case '999': //发送失败
+			$this->result('info', '发送失败'); //发送结果信息说明
 			break;
-		case '110': //不在发送时间内
-			$this->result('info', '不在发送时间内'); //发送结果信息说明
+		case '111': //手机格式错误
+			$this->result('info', '手机格式错误'); //发送结果信息说明
 			break;
-		case '111': //超出该账户当月发送额度限制
-			$this->result('info', '超出该账户当月发送额度限制'); //发送结果信息说明
+		case '112': //手机号码为空
+			$this->result('info', '手机号码为空'); //发送结果信息说明
 			break;
-		case '112': //无此产品，用户没有订购该产品
-			$this->result('info', '无此产品'); //发送结果信息说明
+		case '113': //发送内容为空
+			$this->result('info', '发送内容为空'); //发送结果信息说明
 			break;
-		case '113': //extno格式错（非数字或者长度不对）
-			$this->result('info', 'extno格式错'); //发送结果信息说明
+		case '114': //发送内容太长
+			$this->result('info', '发送内容太长'); //发送结果信息说明
 			break;
-		case '115': //自动审核驳回
-			$this->result('info', '自动审核驳回'); //发送结果信息说明
+		case '115': //Msg_id太长。
+			$this->result('info', 'Msg_id太长。'); //发送结果信息说明
 			break;
-		case '116': //签名不合法，未带签名（用户必须带签名的前提下）
-			$this->result('info', '签名不合法'); //发送结果信息说明
+		case '116': //手机号码超过最大值。
+			$this->result('info', '手机号码超过最大值。'); //发送结果信息说明
 			break;
-		case '117': //IP地址认证错,请求调用的IP地址不是系统登记的IP地址
-			$this->result('info', 'IP地址认证错'); //发送结果信息说明
-			break;
-		case '118': //用户没有相应的发送权限
-			$this->result('info', '用户没有相应的发送权限'); //发送结果信息说明
-			break;
-		case '119': //用户已过期
-			$this->result('info', '用户已过期'); //发送结果信息说明
-			break;
-		case '120': //短信内容不在白名单中
-			$this->result('info', '短信内容不在白名单中'); //发送结果信息说明
+		case '400': //网络错误
+			$this->result('info', '网络错误'); //发送结果信息说明
 			break;
 		default:
 			$this->result('info', '短信发送失败'); //发送结果信息说明
@@ -138,7 +130,6 @@ class OasmsAgent extends Agent {
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
 		$result = curl_exec($ch);
-		curl_close($ch);
 		return $result;
 	}
 

@@ -44,13 +44,11 @@ Sms::agents([
 //example:
 Sms::enable([
     //被使用概率为2/3
-    'Chuanglan' => '20',
-
+    'Oasms' => '20',
+    //被使用概率为1/3
+    'Chuanglan' => '10 backup',
     //被使用概率为1/3，且为备用代理器
-    'YunPian' => '10 backup',
-
-    //仅为备用代理器
-    'YunTongXun' => '0 backup',
+    'YunPian' => '0 backup',
 ]);
 ```
 
