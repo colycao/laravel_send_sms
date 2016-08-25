@@ -1,7 +1,8 @@
 <?php
-namespace Toplan\PhpSms;
+namespace Colyii\LaravelSms;
+use Toplan\PhpSms\Agent;
 
-class OasmsAgent extends Agent {
+class ChuanglanAgent extends Agent {
 	//override
 	//发送短信一级入口
 	public function sendSms($to, $content, $tempId, array $data) {
@@ -12,15 +13,14 @@ class OasmsAgent extends Agent {
 	//override
 	//发送短信二级入口：发送内容短信
 	public function sendContentSms($to, $content) {
-		$url = $this->url;
+		$url = $this->clUrl;
 
-		//接口参数
+		//创蓝接口参数
 		$params = array(
-			'corpAccount' => $this->corpAccount,
-			'userAccount' => $this->userAccount,
-			'pwd' => $this->pwd,
+			'account' => $this->apiAccount,
+			'pswd' => $this->apiPassword,
+			'msg' => $content,
 			'mobile' => $to,
-			'content' => $content,
 			'needstatus' => true,
 			'product' => '',
 			'extno' => '',

@@ -1,41 +1,27 @@
 {
-  "name": "toplan/phpsms",
-  "description": "sms send library for php, support the main SMS service provider.",
-  "license": "MIT",
-  "version": "1.6.0",
-  "keywords": ["sms", "php sms", "phpsms", "sms library for php"],
-  "authors": [
-    {
-      "name": "toplan",
-      "email": "toplan710@gmail.com"
-    }
-  ],
-  "require": {
-    "php": ">=5.4.0",
-    "toplan/task-balancer": ">=0.4.2",
-    "jeremeamia/SuperClosure": "~2.2.0"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "~4.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "Toplan\\PhpSms\\": [
-        "src/phpsms/",
-        "src/phpsms/agents/"
-      ],
-      "Toplan\\PhpSms\\Facades\\": [
-        "src/phpsms/facades/"
-      ]
+    "name": "colyii/laravel_send_sms",
+    "description": "sms for laravel",
+    "keywords": ["php", "sms", "laravel"],
+    "license": "MIT",
+    "type": "project",
+    "version":"1.0.0",
+    "authors": [
+        {
+            "name": "colyii",
+            "email": "colyii@icloud.com",
+            "homepage": "http://www.php2py.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "toplan/laravel-sms": "2.5.*"
     },
-    "classmap": [
-      "src/phpsms/lib/"
-    ]
-  },
-  "autoload-dev": {
-    "classmap": [
-      "tests/"
-    ]
-  },
-  "minimum-stability" : "dev"
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Colyii\\LaravelSms\\": "src/agents/",
+            "Toplan\\PhpSms\\Facades\\": "src/phpsms/facades/"
+        }
+    }
 }
