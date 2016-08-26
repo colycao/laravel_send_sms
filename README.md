@@ -25,31 +25,32 @@ Sms::agents([
         'userAccount' => 'your userAccount',
         'pwd' => 'your api password',
         'url' => 'http://www.oa-sms.com/sendSms.action',
-        'agentClass' => 'colyii\LaravelSms\OasmsAgent',
     ],
     'Chuanglan' => [
         'apiAccount' => 'your api key',
         'apiPassword' => 'your api password',
         'clUrl' => 'http://222.73.117.158/msg/HttpBatchSendSM',
-        'agentClass' => 'colyii\LaravelSms\ChuanglanAgent',
     ]
 ]);
 ```
 
 - 配置可用代理器
 
-配置你的调度方案。可在`config\phpsms.php`中键为`enable`的数组中配置。也可以手动在程序中设置，示例如下：
+配置你的调度方案。可在`config\phpsms.php`中键为`scheme`的数组中配置。也可以手动在程序中设置，示例如下：
 
 ```php
 //example:
-Sms::enable([
-    //被使用概率为2/3
-    'Oasms' => '20',
-    //被使用概率为1/3
-    'Chuanglan' => '10 backup',
-    //被使用概率为1/3，且为备用代理器
-    'YunPian' => '0 backup',
-]);
+'scheme' => [
+        'Oasms' => [
+            '30',
+            'agentClass' => 'Colyii\LaravelSms\OasmsAgent',
+        ],
+        'Chuanglan' => [
+            '0 backup',
+            'agentClass' => 'Colyii\LaravelSms\ChuanglanAgent',
+        ],
+        'YunPian' => '0 backup',
+    ],
 ```
 
 ###2. 在laravel中使用
