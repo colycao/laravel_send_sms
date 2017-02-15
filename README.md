@@ -65,12 +65,14 @@ Sms::agents([
 'providers' => [
     ...
     Toplan\PhpSms\PhpSmsServiceProvider::class,
+    Toplan\Sms\SmsManagerServiceProvider::class,
 ]
 
 //别名
 'aliases' => [
     ...
     'PhpSms' => Toplan\PhpSms\Facades\Sms::class,
+    'SmsManager' => Toplan\Sms\Facades\SmsManager::class,
 ]
 ```
 
